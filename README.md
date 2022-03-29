@@ -6,7 +6,17 @@
 * Create the namespace where the GPU app will be deployed. 
 * Add the kubeconfig file of the cluster to the Bitfusion UI and select the namespace created in previous step. 
 * Generate a token for the cluster within the Bitfusion UI. 
-* Modify the Dockerfile by adding these lines - 
+* Validate that the relevent secrets are present in the namespace where the app is getting deployed - 
+
+```cmd
+kubectl get secrets -n k8s-papivot-tools
+
+NAME                                   TYPE                                  DATA   AGE
+bitfusion-client-secret-ca.crt         Opaque                                1      13h
+bitfusion-client-secret-client.yml     Opaque                                1      13h
+bitfusion-client-secret-servers.conf   Opaque                                1      13h
+```
+* Modify the container Dockerfile to add the following entries and build the Docker image - 
 
 ```cmd
 ######################################
@@ -17,23 +27,11 @@ RUN apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
-    curl -fSslL -O https://packages.vmware.com/bitfusion/ubuntu/20.04/bitfusion-client-ubuntu2004_4.5.0-4_amd64.deb && \
-    apt-get install -y ./bitfusion-client-ubuntu2004_4.5.0-4_amd64.deb && \
+    curl -fSslL -O https://packages.vmware.com/bitfusion/ubuntu/20.04/bitfusion-client-ubuntu2004_4.5.1-9_amd64.deb && \
+    apt-get install -y ./bitfusion-client-ubuntu2004_4.5.1-9_amd64.deb && \
     rm -rf /tmp/*
 ########################################
 ```
-
-* Validate that the relevent secrets are present in the namespace where the app is getting deployed - 
-```cmd
-kubectl get secrets -n k8s-papivot-tools
-
-NAME                                   TYPE                                  DATA   AGE
-bitfusion-client-secret-ca.crt         Opaque                                1      13h
-bitfusion-client-secret-client.yml     Opaque                                1      13h
-bitfusion-client-secret-servers.conf   Opaque                                1      13h
-```
-
-
 * Add the following entries to the deployment yaml
 
 ```yaml
@@ -60,3 +58,4 @@ bitfusion-client-secret-servers.conf   Opaque                                1  
           defaultMode: 0640
 ```
 
+* Deploy the application in the namespace created earlier. Validate by executing `bitfusion run -n 1 -p 0.3 nvidia-smi` within the container. 
