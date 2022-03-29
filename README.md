@@ -2,8 +2,11 @@
 
 ## Steps
 
-* Enable the Bitfusion server and perform the configurations within vSphere
-* Modify the Docckerfile by adding these lines - 
+* Enable the Bitfusion server and perform the required configurations within vSphere.
+* Create the namespace where the GPU app will be deployed. 
+* Add the kubeconfig file of the cluster to the Bitfusion UI and select the namespace created in previous step. 
+* Generate a token for the cluster within the Bitfusion UI. 
+* Modify the Dockerfile by adding these lines - 
 
 ```cmd
 ######################################
