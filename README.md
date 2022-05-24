@@ -16,7 +16,7 @@ bitfusion-client-secret-ca.crt         Opaque                                1  
 bitfusion-client-secret-client.yml     Opaque                                1      13h
 bitfusion-client-secret-servers.conf   Opaque                                1      13h
 ```
-* Modify the container Dockerfile to add the following entries and build the Docker image - 
+* Modify the container Dockerfile to add the following entries and build the Docker image (Ubuntu based image)- 
 
 ```cmd
 ######################################
